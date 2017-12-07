@@ -5,7 +5,7 @@ function validCharacter(character) {
     return character.name !== undefined &&
         character.icon !== undefined &&
         (character.respond !== undefined || character.hear !== undefined) &&
-        Array.isArray(character.messages);
+        (Array.isArray(character.messages) || character.json_url !== undefined);
 }
 
 class HubotCharacter {
@@ -26,7 +26,7 @@ class HubotCharacter {
 
         let errors = [];
         this.characters.map(
-            (character) => new MessageClient(this.postMessage, character)
+            (character) => new MessageClient(this.postMessage, character, this.robot)
         ).forEach((messageClient) => {
             if ( !validCharacter(messageClient.character) ) {
                 errors = errors.concat([messageClient.character]);
